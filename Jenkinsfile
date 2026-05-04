@@ -4,21 +4,21 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out source code from repository...'
+                echo 'Checking out code...'
                 checkout scm
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing dependencies from package.json...'
+                echo 'Installing dependencies...'
                 sh 'npm install selenium-webdriver assert'
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
-                echo 'Executing test suite...'
+                echo 'Running tests...'
                 sh 'node DataBase/test_app.js'
             }
         }
@@ -28,7 +28,7 @@ pipeline {
         success {
             emailext (
                 subject: "SUCCESS: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
-                body: "The test stage completed successfully. All tests passed.",
+                body: "The test stage completed successfully.",
                 to: 'musharafulislam333@email.com',
                 recipientProviders: [culprits()]
             )
@@ -36,7 +36,7 @@ pipeline {
         failure {
             emailext (
                 subject: "FAILURE: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
-                body: "There was an error during the pipeline test stage. Please check the console output.",
+                body: "Pipeline failed during execution. Check the console output for details.",
                 to: 'musharafulislam333@email.com',
                 recipientProviders: [culprits()]
             )
